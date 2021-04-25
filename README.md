@@ -13,6 +13,9 @@
 * requests
 
 ### Running
+#### Start the server:
 ```
 python server.py
 ```
+#### Open a web browser:
+> http://localhost:8080/
