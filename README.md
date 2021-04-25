@@ -8,12 +8,12 @@
 * Listing repository names and star counts for any (valid) GitHub user.
 * Displaying the total number of stars of the user.
 
-### Requirements
+## Requirements
 * bottle (https://bottlepy.org/)
 * re 
 * requests
 
-### Running
+## Running
 1. Start the server:
 ```
 python server.py
@@ -22,8 +22,8 @@ python server.py
 > http://localhost:8080/
 3. Type a GitHub username into the form and click the **Load repos** button
 
-### Future enhancement ideas
-* Providing the username by GET method with URL parameters, e.g.:
-> http://localhost:8080?username=adam-handke
+## Future enhancement ideas
 * Improving appearance with better CSS styles.
 * Displaying more info about the user and his repositories.
+* Providing the username by GET method with URL parameters, e.g.:
+> http://localhost:8080?username=adam-handke
