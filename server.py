@@ -45,14 +45,14 @@ def form_handler():
     repos = get_github_repos(username)
     if len(repos) > 0:
         star_counter = 0
-        html += f"<p>Repositories of user <b><a href=\"https://github.com/{username}\">{username}</a></b>:</p>"
-        html += "<table>"
-        html += "<tr><th>No.</th><th>Repo name</th><th>Stars</th></tr>"
+        html += f"<p>Repositories of user <b><a href=\"https://github.com/{username}\">{username}</a></b>:</p>\n"
+        html += "<table>\n"
+        html += "<tr><th>No.</th><th>Repo name</th><th>Stars</th></tr>\n"
         for i, r in enumerate(repos):
             stars = r['stargazers_count']
             star_counter += stars
-            html += f"<tr><td>{i+1}</td><td>{r['name']}</td><td>{stars}</td></tr>"
-        html += "</table>"
+            html += f"<tr><td>{i+1}</td><td>{r['name']}</td><td>{stars}</td></tr>\n"
+        html += "</table>\n"
         if star_counter == 1:
             star_str = "star"
         else:
