@@ -1,5 +1,6 @@
 # server made using Bottle framework
 from bottle import Bottle, template, request
+import re
 
 app = Bottle()
 
@@ -16,7 +17,13 @@ def form_handler():
     username = request.forms.get('username')
     print("Username:", username)
     html = html_template
-    html += f"<p>Repos of user {username}:</p>"
+
+    # regex based on https://github.com/regexhq/regex-username
+    regex = re.search(r'^([A-Za-z\d]+-)*[A-Za-z\d]+$', username)
+    if regex is not None:
+        html += f"<p>Repos of user <b>{username}</b>:</p>"
+    else:
+        html += "<p>Wrong username!</p>"
     html += html_completion
 
     return template(html)
