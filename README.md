@@ -1,6 +1,7 @@
 # GitHub Checker
 * HTTP server app for checking GitHub repos of a user.
 * Written in Python using Bottle framework.
+* Uses the POST method from HTTP.
 
 ### Features
 * Taking any username and validating it.
@@ -13,9 +14,10 @@
 * requests
 
 ### Running
-#### Start the server:
+1. Start the server:
 ```
 python server.py
 ```
-#### Open a web browser:
+2. Open a web browser:
 > http://localhost:8080/
+3. Type a GitHub username into the form and click the **Load repos** button
