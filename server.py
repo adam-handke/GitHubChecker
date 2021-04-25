@@ -7,11 +7,19 @@ app = Bottle()
 
 
 def get_github_repos(username):
-    url = f"https://api.github.com/users/{username}/repos"
-    status_code = requests.head(url).status_code
-    if status_code == 200:
-        return requests.get(url).json()
+    # regex based on https://github.com/regexhq/regex-username
+    regex = re.search(r'^([A-Za-z\d]+-)*[A-Za-z\d]+$', username)
+
+    if regex is not None:
+        url = f"https://api.github.com/users/{username}/repos"
+        status_code = requests.head(url).status_code
+        if status_code == 200:
+            return requests.get(url).json()
+        else:
+            print("User does not exist")
+            return []
     else:
+        print("Incorrect username")
         return []
 
 
@@ -28,10 +36,8 @@ def form_handler():
     print("Sending response for username:", username)
     html = html_template
 
-    # regex based on https://github.com/regexhq/regex-username
-    regex = re.search(r'^([A-Za-z\d]+-)*[A-Za-z\d]+$', username)
     repos = get_github_repos(username)
-    if regex is not None and len(repos) > 0:
+    if len(repos) > 0:
         star_counter = 0
         html += f"<p>Repos of user <b><a href=\"https://github.com/{username}\">{username}</a></b>:</p>"
         html += "<table>"
