@@ -6,4 +6,6 @@
 * bottle (https://bottlepy.org/)
 
 ### Running
-> python server.py
+```
+python server.py
+```
