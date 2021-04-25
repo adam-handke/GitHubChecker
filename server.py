@@ -9,18 +9,24 @@ app = Bottle()
 def get_github_repos(username):
     # regex based on https://github.com/regexhq/regex-username
     regex = re.search(r'^([A-Za-z\d]+-)*[A-Za-z\d]+$', username)
+    repos = []
 
     if regex is not None:
-        url = f"https://api.github.com/users/{username}/repos"
-        status_code = requests.head(url).status_code
-        if status_code == 200:
-            return requests.get(url).json()
-        else:
-            print("User does not exist")
-            return []
+        page = 1
+        while page <= 10:  # increase the number to load more than a 1000 repos
+            url = f"https://api.github.com/users/{username}/repos?page={page}&per_page=100"
+            req = requests.get(url)
+            if req.status_code == 200 and len(req.json()) != 0:
+                repos.extend(req.json())
+                page += 1
+            else:
+                break
+        if len(repos) == 0:
+            print("User does not exist or has no repos")
     else:
         print("Incorrect username")
-        return []
+
+    return repos
 
 
 @app.route('/')
@@ -39,13 +45,13 @@ def form_handler():
     repos = get_github_repos(username)
     if len(repos) > 0:
         star_counter = 0
-        html += f"<p>Repos of user <b><a href=\"https://github.com/{username}\">{username}</a></b>:</p>"
+        html += f"<p>Repositories of user <b><a href=\"https://github.com/{username}\">{username}</a></b>:</p>"
         html += "<table>"
-        html += "<tr><th>Repo name</th><th>Stars</th></tr>"
-        for r in repos:
+        html += "<tr><th>No.</th><th>Repo name</th><th>Stars</th></tr>"
+        for i, r in enumerate(repos):
             stars = r['stargazers_count']
             star_counter += stars
-            html += f"<tr><td>{r['name']}</td><td>{stars}</td></tr>"
+            html += f"<tr><td>{i+1}</td><td>{r['name']}</td><td>{stars}</td></tr>"
         html += "</table>"
         if star_counter == 1:
             star_str = "star"
@@ -53,7 +59,7 @@ def form_handler():
             star_str = "stars"
         html += f"<p><b>{username}</b> has {star_counter} {star_str}!</p>"
     else:
-        html += "<p>Wrong username!</p>"
+        html += "<p>Could not load repos for this username!</p>"
     html += html_completion
 
     return template(html)
